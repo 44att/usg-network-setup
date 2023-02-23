@@ -1,0 +1,17 @@
+---
+- name: Download Wireguard installer
+  get_url:
+    url: https://github.com/WireGuard/wireguard-vyatta-ubnt/releases/download/1.0.20220627-1/ugw3-v1-v1.0.20220627-v1.0.20210914.deb
+    dest: /root/install-wireguard.deb
+    mode: 0740
+  become: true
+
+- name: Install Wireguard
+  shell: dpkg -i /root/install-wireguard.deb
+  become: true
+
+- name: Remove Wireguard installer
+  file:
+    path: /root/install-wireguard.deb
+    state: absent
+  become: true

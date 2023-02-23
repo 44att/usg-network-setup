@@ -1,0 +1,5 @@
+[usg]
+192.168.1.1 ansible_user=matt_unifi_network
+
+[cloud_key]
+192.168.1.4

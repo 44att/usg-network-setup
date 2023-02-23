@@ -1,0 +1,11 @@
+---
+- name: Include vars
+  include_vars: /Users/matt/.ansible/.default_vars.yml
+
+- name: Copy config.gateway.json file
+  template:
+    src: config.gateway.json.j2
+    dest: /srv/unifi/data/sites/default/config.gateway.json
+    owner: unifi
+    group: unifi
+    mode: 0644

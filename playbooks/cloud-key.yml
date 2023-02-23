@@ -1,0 +1,4 @@
+---
+- hosts: cloud_key
+  roles:
+    - { role: cloud_key, tags: cloud_key }

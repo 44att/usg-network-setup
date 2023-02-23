@@ -1,0 +1,4 @@
+---
+- hosts: usg
+  roles:
+    - { role: usg, tags: usg }
