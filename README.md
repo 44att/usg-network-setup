@@ -4,7 +4,7 @@ Ansible scripts to install Wireguard on Unifi USG and apply custom network confi
 
 ### Usage
 ```bash
-ansible-playbook ./playbooks/cloud_key.yml --ask-pass
+ansible-playbook ./playbooks/cloud-key.yml --ask-pass
 ```
 or 
 ```bash
