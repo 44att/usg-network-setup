@@ -2,13 +2,13 @@
   "firewall": {
     "group": {
       "network-group": {
-				"remote_user_vpn_network": {
-					"description": "Remote User VPN subnets",
-					"network": [
-						"{{ remote_user_vpn_subnet }}"
-					]
-				}
-			}
+        "remote_user_vpn_network": {
+          "description": "Remote User VPN subnets",
+          "network": [
+            "{{ remote_user_vpn_subnet }}"
+          ]
+        }
+      }
     },
     "name": {
       "WAN_LOCAL": {
@@ -82,6 +82,17 @@
     "source-validation": "disable"
   },
   "interfaces": {
+    "pseudo-ethernet": {
+      "peth0": {
+        "address": [
+          "192.168.2.100/24"
+        ],
+        "description": "Access to Modem",
+        "link": [
+          "eth0"
+        ]
+      }
+    },
     "ethernet": {
       "eth1": {
         "vif": {
@@ -111,28 +122,30 @@
           "{{ wg99_ipv6_address }}"
         ],
         "firewall": {
-            "in": {
-                "modify": "VPN-REMOTE",
-                "name": "LAN_IN"
-            },
-            "local": {
-                "name": "LAN_LOCAL"
-            },
-            "out": {
-                "name": "LAN_OUT"
-            }
+          "in": {
+            "modify": "VPN-REMOTE",
+            "name": "LAN_IN"
+          },
+          "local": {
+            "name": "LAN_LOCAL"
+          },
+          "out": {
+            "name": "LAN_OUT"
+          }
         },
         "listen-port": "{{ wg99_port }}",
         "mtu": "{{ wg99_mtu }}",
-        "peer": [{
+        "peer": [
+          {
             "{{ iphone_public_key }}": {
-                "allowed-ips": [
-                    "{{ iphone_allowed_ipv4_address }}",
-                    "{{ iphone_allowed_ipv6_address }}"
-                ],
-                "persistent-keepalive": 25
+              "allowed-ips": [
+                "{{ iphone_allowed_ipv4_address }}",
+                "{{ iphone_allowed_ipv6_address }}"
+              ],
+              "persistent-keepalive": 25
             }
-        }],
+          }
+        ],
         "private-key": "/config/auth/wireguard/wg_private.key",
         "route-allowed-ips": "false"
       },
@@ -199,6 +212,7 @@
       "rule": {
         "1500": {
           "description": "DNAT for qBittorrent port {{ qbittorrent_port }}",
+          "log": "disable",
           "destination": {
             "port": "{{ qbittorrent_port }}"
           },
@@ -209,6 +223,19 @@
           },
           "protocol": "tcp",
           "type": "destination"
+        },
+        "5003": {
+          "description": "Masquerade to pseudo ethernet for modem access",
+          "log": "disable",
+          "destination": {
+            "address": [
+              "192.168.2.1"
+            ]
+          },
+          "outbound-interface": [
+            "peth0"
+          ],
+          "type": "masquerade"
         },
         "5004": {
           "description": "Masquerade to VPN wg0",
